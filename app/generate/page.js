@@ -114,7 +114,7 @@ export default function Generate() {
         setLoading(true)
 
         try {
-            const response = await fetch('/api/test-key', {
+            const response = await fetch('/api/generate', {
                 method: 'POST',
                 body: text,
             })
