@@ -1,5 +1,4 @@
-'use client'
-
+"use client"
 import { useState, useEffect } from 'react'
 import { useUser } from '@clerk/nextjs'
 import { useRouter } from 'next/navigation'
@@ -28,15 +27,19 @@ import {
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles'
 import { collection, doc, getDoc, writeBatch } from 'firebase/firestore';
 import { db } from '@/firebase';
-import FlashOnIcon from '@mui/icons-material/FlashOn';
+import LibraryBooksIcon from '@mui/icons-material/LibraryBooks.js';
 
 const theme = createTheme({
     palette: {
         primary: {
-            main: '#6C63FF',
+            main: '#B57EDC',
         },
         secondary: {
             main: '#FF6584',
+        },
+        text: {
+            primary: '#FFFFFF',
+            secondary: '#FFFFFF',
         },
     },
     typography: {
@@ -45,9 +48,15 @@ const theme = createTheme({
 });
 
 const CustomCard = styled(Card)(({ theme }) => ({
-    borderRadius: '16px',
+    borderRadius: '10px',
     boxShadow: '0 8px 24px rgba(0, 0, 0, 0.15)',
     transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+    width: '300px',  // Fixed width
+    height: '300px', // Fixed height
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
     '&:hover': {
         transform: 'translateY(-5px)',
         boxShadow: '0 12px 36px rgba(0, 0, 0, 0.2)',
@@ -55,30 +64,38 @@ const CustomCard = styled(Card)(({ theme }) => ({
 }));
 
 const GradientButton = styled(Button)(({ theme }) => ({
-    background: 'linear-gradient(90deg, #6C63FF, #8A7FF0)',
+    background: 'linear-gradient(90deg, #B57EDC, #8A7FF0)',
     '&:hover': {
-        background: 'linear-gradient(90deg, #6C63FF, #8A7FF0)',
+        background: 'linear-gradient(90deg, #B57EDC, #8A7FF0)',
     },
 }));
 
-const FlashcardFront = styled(Box)(({ theme }) => ({
-    backgroundColor: '#EDE7F6',
-    color: '#6C63FF',
+// const FlashcardSide = styled(Box)(({ theme }) => ({
+//     backgroundColor: '#B57EDC',
+//     width: '280px',  // Fixed width
+//     height: '280x', // Fixed height
+//     color: 'white',
+//     display: 'flex',
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     // width: '100%',
+//     // height: '100%',
+//     borderRadius: '8px',
+//     // overflow: 'hidden',
+//     textAlign: 'center',
+//     padding: theme.spacing(2),
+// }));
+const FlashcardSide = styled(Box)(({ theme }) => ({
+    backgroundColor: '#B57EDC',
+    width: '240px',  // Match CustomCard width
+    height: '200px', // Match CustomCard height
+    color: 'white',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: theme.spacing(2),
     borderRadius: '8px',
-}));
-
-const FlashcardBack = styled(Box)(({ theme }) => ({
-    backgroundColor: '#F3E5F5',
-    color: '#6C63FF',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    textAlign: 'center',
     padding: theme.spacing(2),
-    borderRadius: '8px',
 }));
 
 export default function Generate() {
@@ -107,7 +124,7 @@ export default function Generate() {
 
     const handleSubmit = async () => {
         if (!text.trim()) {
-            alert('Please enter some text to generate flashcards.')
+            alert('Enter text to generate Flashcards')
             return
         }
 
@@ -191,7 +208,7 @@ export default function Generate() {
                 <Toolbar>
                     {/* Logo */}
                     <IconButton edge="start" color="primary" aria-label="logo" href="/">
-                        <FlashOnIcon fontSize="large" />
+                        <LibraryBooksIcon fontSize="large" />
                     </IconButton>
 
                     {/* Title */}
@@ -199,145 +216,111 @@ export default function Generate() {
                         FlashCards
                     </Typography>
 
-                    <Button color="primary" variant="text" href="/flashcards" sx={{ marginRight: 2 }}>My Flashcards</Button>
-
+                    <Button color="primary" variant="text" href="/flashcards" sx={{ marginRight: 2 }}>Saved Flashcards</Button>
                 </Toolbar>
             </AppBar>
 
-
-            <Container maxWidth="md">
-                <Box sx={{ mt: 4, mb: 6, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 700, color: '#333' }}>
-                        Generate Flashcards
-                    </Typography>
-                    <Paper sx={{ p: 4, width: '100%', background: '#f5f5f5', borderRadius: '16px' }}>
-                        <TextField
-                            value={text}
-                            onChange={(e) => setText(e.target.value)}
-                            label="Enter text"
-                            fullWidth
-                            multiline
-                            rows={4}
-                            variant="outlined"
-                            sx={{ mb: 2 }}
-                        />
-                        <GradientButton
-                            variant="contained"
-                            onClick={handleSubmit}
-                            fullWidth
-                            disabled={loading}
-                        >
+            <Box sx={{ 
+                minHeight: '100vh', 
+                backgroundImage: 'url(/bg.jpeg)', 
+                backgroundSize: 'cover', 
+                backgroundPosition: 'center',
+                display: 'flex',
+                flexDirection: 'column'
+            }}>
+                <Container maxWidth="lg" sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 8 }}>
+                    <Box sx={{ mt: 4, mb: 6, display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+                        <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 700, color: 'white' }}>
                             Generate Flashcards
-                        </GradientButton>
-                    </Paper>
-                </Box>
-
-                {loading ? (
-                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh' }}>
-                        <CircularProgress />
-                    </Box>
-                ) : flashcards.length > 0 ? (
-                    <Box sx={{ mt: 4 }}>
-                        <Typography variant="h5" component="h2" gutterBottom sx={{ fontWeight: 700 }}>
-                            Generated Flashcards
                         </Typography>
-                        <Grid container spacing={3}>
-                            {flashcards.map((flashcard, index) => (
-                                <Grid item xs={12} sm={6} md={4} key={index}>
-                                    <CustomCard onClick={() => handleCardClick(index)}>
-                                        <CardActionArea>
-                                            <CardContent>
-                                                <Box sx={{
-                                                    perspective: "1000px",
-                                                    '& > div': {
-                                                        transition: 'transform 0.6s ease-in-out',
-                                                        transformStyle: 'preserve-3d',
-                                                        position: 'relative',
-                                                        width: '100%',
-                                                        height: '200px',
-                                                        transform: flipped[index] ? 'rotateY(180deg)' : 'rotateY(0deg)',
-                                                    },
-                                                    '& > div > div': {
-                                                        position: 'absolute',
-                                                        width: '100%',
-                                                        height: '100%',
-                                                        backfaceVisibility: 'hidden',
-                                                        display: 'flex',
-                                                        justifyContent: 'center',
-                                                        alignItems: 'center',
-                                                        padding: 2,
-                                                        boxSizing: 'border-box',
-                                                        borderRadius: '8px',
-                                                    },
-                                                    '& > div > div:nth-of-type(2)': {
-                                                        transform: 'rotateY(180deg)',
-                                                    },
-                                                }}>
-                                                    <div>
-                                                        <FlashcardFront>
-                                                            <Typography variant='h6' component="div">
-                                                                {flashcard.front}
-                                                            </Typography>
-                                                        </FlashcardFront>
-                                                        <FlashcardBack>
-                                                            <Typography variant='h6' component="div">
-                                                                {flashcard.back}
-                                                            </Typography>
-                                                        </FlashcardBack>
-                                                    </div>
-                                                </Box>
-                                            </CardContent>
-                                        </CardActionArea>
-                                    </CustomCard>
-                                </Grid>
-                            ))}
-                        </Grid>
+                        <Paper sx={{ p: 4, width: '100%', background: 'black', borderRadius: '16px' }}>
+                            <TextField
+                                value={text}
+                                onChange={(e) => setText(e.target.value)}
+                                label="Enter text"
+                                fullWidth
+                                multiline
+                                rows={4}
+                                variant="outlined"
+                                sx={{ mb: 2 }}
+                            />
+                            <GradientButton
+                                variant="contained"
+                                onClick={handleSubmit}
+                                fullWidth
+                                disabled={loading}
+                            >
+                                Generate Flashcards
+                            </GradientButton>
+                        </Paper>
                     </Box>
-                ) : null}
 
-                {flashcards.length > 0 && (
-                    <Box sx={{ mt: 4, mb: 4, display: 'flex', justifyContent: 'center' }}>
-                        <GradientButton
-                            variant="contained"
-                            onClick={handleOpenDialog}
-                            size="large"
-                        >
-                            Save Flashcards
-                        </GradientButton>
-                    </Box>
-                )}
+                    {loading ? (
+                        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh' }}>
+                            <CircularProgress />
+                        </Box>
+                    ) : flashcards.length > 0 ? (
+                        <Box sx={{ mt: 4, width: '100%' }}>
+                            <Typography variant="h5" component="h2" gutterBottom sx={{ fontWeight: 700 }}>
+                                Generated Flashcards
+                            </Typography>
+                            <Grid container spacing={3} justifyContent="center">
+                                {flashcards.map((flashcard, index) => (
+                                    <Grid item key={index}>
+                                        <CustomCard>
+                                            <CardActionArea onClick={() => handleCardClick(index)}>
+                                                <CardContent>
+                                                    {flipped[index] ? (
+                                                        <FlashcardSide>
+                                                            <Typography variant="h6">{flashcard.back}</Typography>
+                                                        </FlashcardSide>
+                                                    ) : (
+                                                        <FlashcardSide>
+                                                            <Typography variant="h6">{flashcard.front}</Typography>
+                                                        </FlashcardSide>
+                                                    )}
+                                                </CardContent>
+                                            </CardActionArea>
+                                        </CustomCard>
+                                    </Grid>
+                                ))}
+                            </Grid>
+                            <Box sx={{ mt: 4 }}>
+                                <GradientButton
+                                    variant="contained"
+                                    onClick={handleOpenDialog}
+                                    fullWidth
+                                >
+                                    Save Flashcards
+                                </GradientButton>
+                            </Box>
+                        </Box>
+                    ) : null}
+                </Container>
 
-                <Dialog open={dialogOpen} onClose={handleCloseDialog}>
-                    <DialogTitle>Save Flashcard Set</DialogTitle>
+                <Dialog open={dialogOpen} onClose={handleCloseDialog} >
+                    <DialogTitle>Save Flashcards</DialogTitle>
                     <DialogContent>
                         <DialogContentText>
-                            Enter a name for your flashcard set to save it.
+                            Enter a name for your flashcard set:
                         </DialogContentText>
                         <TextField
+                            autoFocus
+                            margin="dense"
+                            id="setName"
+                            label="Flashcard Set Name"
+                            type="text"
+                            fullWidth
+                            variant="outlined"
                             value={setName}
                             onChange={(e) => setSetName(e.target.value)}
-                            label="Set Name"
-                            fullWidth
-                            margin="dense"
                         />
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleCloseDialog} color="secondary">
-                            Cancel
-                        </Button>
-                        <Button onClick={saveFlashcards} color="primary">
-                            Save
-                        </Button>
+                        <Button onClick={handleCloseDialog}>Cancel</Button>
+                        <GradientButton onClick={saveFlashcards}>Save</GradientButton>
                     </DialogActions>
                 </Dialog>
-            </Container>
-
-            <Box sx={{ py: 4, backgroundColor: '#f5f5f5' }}>
-                <Container maxWidth="lg">
-                    <Typography variant="body2" color="textSecondary" align="center">
-                        © {new Date().getFullYear()} FlashCards. All rights reserved.
-                    </Typography>
-                </Container>
             </Box>
         </ThemeProvider>
     )

@@ -3,7 +3,8 @@
 import { useUser } from "@clerk/nextjs";
 import { Box, Card, CardActionArea, CardContent, Container, Grid, Typography, AppBar, Toolbar, IconButton, CircularProgress } from "@mui/material";
 import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
-import FlashOnIcon from '@mui/icons-material/FlashOn';
+import LibraryBooksIcon from '@mui/icons-material/LibraryBooks.js';
+
 import { collection, doc, getDoc } from "firebase/firestore";
 import { db } from '@/firebase';
 import { useSearchParams } from "next/navigation";
@@ -12,15 +13,19 @@ import { useEffect, useState } from "react";
 
 const theme = createTheme({
     palette: {
-        primary: {
-            main: '#6C63FF',
-        },
-        secondary: {
-            main: '#FF6584',
-        },
+      primary: {
+        main: '#B57EDC',
+      },
+      secondary: {
+        main: '#FF6584',
+      },
+      text: {
+        primary: '#B57EDC',
+        secondary: '#FFFFFF',
+      },
     },
     typography: {
-        fontFamily: 'Inter, sans-serif',
+      fontFamily: 'Inter, sans-serif',
     },
 });
 
@@ -127,7 +132,7 @@ export default function Flashcard() {
             <CustomAppBar position="static">
                 <Toolbar>
                     <IconButton edge="start" color="inherit" aria-label="logo" href="/">
-                        <FlashOnIcon fontSize="large" />
+                        <LibraryBooksIcon fontSize="large" />
                     </IconButton>
                     <Typography variant="h6" sx={{ flexGrow: 1 }}>
                         Flashcard Details
@@ -178,11 +183,15 @@ export default function Flashcard() {
                     </Grid>
                 </Box>
             </Container>
-            <Footer>
-                <Typography variant="body2" color="textSecondary">
-                    © {new Date().getFullYear()} FlashCards. All rights reserved.
-                </Typography>
-            </Footer>
+            
+                <Box sx={{ py: 4, backgroundColor: 'black',color:'white' }}>
+        <Container maxWidth="lg">
+          <Typography variant="body2" color="textSecondary" align="center">
+            © {new Date().getFullYear()} FlashCards AI.All rights reserved.
+          </Typography>
+        </Container>
+      </Box>
+           
         </ThemeProvider>
     );
 }

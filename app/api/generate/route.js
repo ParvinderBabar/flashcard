@@ -2,8 +2,8 @@ import { NextResponse } from "next/server";
 import { CohereClient } from "cohere-ai";
 
 const systemPrompt = 
-`You are a flashcard creator, you take in text and create multiple flashcards from it. Make sure to create exactly 10 flashcards.
-Both front and back should be one sentence long.
+`You are a flashcard creator, you take in text and create multiple flashcards from it. Make sure to create exactly 12 flashcards.
+Both front and back should be one sentence long that can fit in box of 240px width.
 You should return in the following format
 {
   "flashcards":[

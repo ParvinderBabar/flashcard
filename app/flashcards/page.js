@@ -5,21 +5,26 @@ import { useRouter } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
 import { Container, Grid, Card, CardActionArea, CardContent, Typography, AppBar, Toolbar, IconButton, Box, CircularProgress } from '@mui/material';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
-import FlashOnIcon from '@mui/icons-material/FlashOn';
+import LibraryBooksIcon from '@mui/icons-material/LibraryBooks.js';
 import { collection, doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '@/firebase';
 
 const theme = createTheme({
-    palette: {
-        primary: {
-            main: '#6C63FF',
-        },
-        secondary: {
-            main: '#FF6584',
-        },
+   
+        palette: {
+      primary: {
+        main: '#B57EDC',
+      },
+      secondary: {
+        main: '#FF6584',
+      },
+      text: {
+        primary: '#B57EDC',
+        secondary: '#FFFFFF',
+      },
     },
     typography: {
-        fontFamily: 'Inter, sans-serif',
+      fontFamily: 'Inter, sans-serif',
     },
 });
 
@@ -45,7 +50,7 @@ const CustomCard = styled(Card)(({ theme }) => ({
 
 const Footer = styled(Box)(({ theme }) => ({
     padding: theme.spacing(4),
-    backgroundColor: '#f5f5f5',
+    backgroundColor: 'black',
     textAlign: 'center',
     width: '100%',
     position: 'fixed',
@@ -98,7 +103,7 @@ export default function Flashcard() {
             <CustomAppBar position="static">
                 <Toolbar>
                     <IconButton edge="start" color="primary" aria-label="logo" href="/">
-                        <FlashOnIcon fontSize="large" />
+                         <LibraryBooksIcon fontSize="large"  />
                     </IconButton>
                     <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: 700, color: '#333' }}>
                         FlashCards
@@ -113,7 +118,8 @@ export default function Flashcard() {
                     minHeight: '100vh',
                     pt: 8,
                     pb: 10,
-                }}
+                    backgroundImage: 'url(/bg.jpeg)', backgroundSize: 'cover', backgroundPosition: 'center', minHeight: '100vh' }}
+                
             >
                 <Box
                     flexGrow={1}
@@ -147,7 +153,7 @@ export default function Flashcard() {
                 </Box>
             </Container>
             <Footer>
-                <Typography variant="body2" color="textSecondary">
+                <Typography variant="body2" color="white">
                     © {new Date().getFullYear()} FlashCards. All rights reserved.
                 </Typography>
             </Footer>
