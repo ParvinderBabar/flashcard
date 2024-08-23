@@ -12,7 +12,7 @@ const inter = Inter({
 
 export const metadata = {
   title: 'FlashCards',
-  description: 'The easiest way to create flashcards from your text. Enhance your learning experience effortlessly.',
+  description: 'Create your own flashcards from the text and save for future.',
 };
 
 export default function RootLayout({ children }) {

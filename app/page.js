@@ -3,19 +3,22 @@ import Image from "next/image";
 import getStripe from "@/utils/get-stripe";
 import Head from 'next/head';
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
-import { AppBar, Box, Button, Container, Grid, Toolbar, Typography, useMediaQuery, useTheme, IconButton } from "@mui/material";
+import { AppBar, Box, Button, Container, Grid, Toolbar, Typography, useMediaQuery, useTheme, IconButton, Snackbar } from "@mui/material";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Fade, Slide } from '@mui/material';
 import { useEffect, useState } from 'react';
 import FlashOnIcon from '@mui/icons-material/FlashOn';
-import TextFieldsIcon from '@mui/icons-material/TextFields';
-import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
-import DevicesIcon from '@mui/icons-material/Devices';
+import CreateIcon from '@mui/icons-material/Create';
+import InsightsIcon from '@mui/icons-material/Insights';
+import CloudSyncIcon from '@mui/icons-material/CloudSync';
+import CloseIcon from '@mui/icons-material/Close';
 
 export default function Home() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [checked, setChecked] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
 
   useEffect(() => {
     setChecked(true);
@@ -46,10 +49,14 @@ export default function Home() {
   const customTheme = createTheme({
     palette: {
       primary: {
-        main: '#6C63FF',
+        main: '#B57EDC',
       },
       secondary: {
         main: '#FF6584',
+      },
+      text: {
+        primary: '#FFFFFF',
+        secondary: '#FFFFFF',
       },
     },
     typography: {
@@ -57,13 +64,23 @@ export default function Home() {
     },
   });
 
+  const handleHover = (featureName) => {
+    setSnackbarMessage(featureName);
+    setOpenSnackbar(true);
+  };
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') return;
+    setOpenSnackbar(false);
+  };
+
   return (
     <ThemeProvider theme={customTheme}>
       <Head>
-        <title>FlashCard</title>
+        <title >FlashCard</title>
         <meta name="description" content="Create flashcards from your text" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+        {/* <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" /> */}
       </Head>
 
       <AppBar position="static" color="transparent" elevation={0}>
@@ -71,11 +88,11 @@ export default function Home() {
           <IconButton edge="start" color="primary" aria-label="logo" href="/">
             <FlashOnIcon fontSize="large" />
           </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontWeight: 700, color: '#333' }}>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontWeight: 700, color: '#FFFFFF' }}>
             FlashCards
           </Typography>
           <SignedOut>
-            <Button color="primary" variant="contained" href="/sign-in" sx={{ marginRight: 2 }}>Login</Button>
+            <Button color="#FFFFFF" variant="contained" href="/sign-in" sx={{ marginRight: 2 }}>Login</Button>
             <Button color="primary" variant="contained" href="/sign-up">Sign Up</Button>
           </SignedOut>
           <SignedIn>
@@ -84,19 +101,19 @@ export default function Home() {
         </Toolbar>
       </AppBar>
 
-      <Container maxWidth="lg" sx={{ mt: 8 }}>
+      <Container maxWidth="lg" sx={{ mt: 8, backgroundImage:'./bg.jpeg' }}>
         <Grid container spacing={4} alignItems="center">
           <Grid item xs={12} md={6}>
             <Slide direction="up" in={checked} mountOnEnter unmountOnExit>
               <Box>
-                <Typography variant="h2" component="h1" gutterBottom sx={{ fontWeight: 700 }}>
-                  Welcome to FlashCards
+                <Typography variant="h2" component="h1" gutterBottom sx={{ fontWeight: 900, color: "white" }}>
+                  Welcome to FlashCards AI
                 </Typography>
                 <Typography variant="h5" color="textSecondary" paragraph>
-                  The easiest way to create flashcards from your text. Enhance your learning experience effortlessly.
+                  Create your own flashcards from text and save for future.
                 </Typography>
                 <Button variant="contained" color="primary" size="large" href="/generate" sx={{ mt: 2, transition: 'all 0.3s', '&:hover': { transform: 'scale(1.05)' } }}>
-                  Get Started
+                  Lets Start
                 </Button>
               </Box>
             </Slide>
@@ -104,7 +121,7 @@ export default function Home() {
           <Grid item xs={12} md={6}>
             <Fade in={checked} timeout={1000}>
               <Box sx={{ textAlign: 'center' }}>
-                {/* <Image src="/flashcard-illustration.png" alt="Flashcards Illustration" width={isMobile ? 300 : 500} height={isMobile ? 300 : 500} /> */}
+                <Image src="/robot-flashcard.jpg" alt="Flashcards Illustration" width={isMobile ? 300 : 500} height={isMobile ? 300 : 500} />
               </Box>
             </Fade>
           </Grid>
@@ -116,29 +133,47 @@ export default function Home() {
           </Typography>
           <Grid container spacing={4} sx={{ mt: 4 }}>
             <Grid item xs={12} md={4}>
-              <Box sx={{ textAlign: 'center', p: 3 }}>
-                <TextFieldsIcon color="primary" sx={{ fontSize: 60, mb: 2 }} />
-                <Typography variant="h6" gutterBottom>Easy Text Input</Typography>
+              <Box 
+                sx={{ 
+                  textAlign: 'center', p: 3, transition: 'all 0.3s', 
+                  '&:hover': { boxShadow: 4, transform: 'scale(1.05)', cursor: 'pointer' }
+                }}
+                onMouseEnter={() => handleHover("Effortless Text Input")}
+              >
+                <CreateIcon color="primary" sx={{ fontSize: 60, mb: 2 }} />
+                <Typography variant="h6" gutterBottom>Effortless Text Input</Typography>
                 <Typography color="textSecondary">
-                  Simply type or paste your text and let our software do the rest. Creating flashcards has never been easier.
+                  Type or paste your text and let us transform it into effective flashcards. The simplest way to study.
                 </Typography>
               </Box>
             </Grid>
             <Grid item xs={12} md={4}>
-              <Box sx={{ textAlign: 'center', p: 3 }}>
-                <AutoAwesomeIcon color="primary" sx={{ fontSize: 60, mb: 2 }} />
-                <Typography variant="h6" gutterBottom>Smart Flashcards</Typography>
+              <Box 
+                sx={{ 
+                  textAlign: 'center', p: 3, transition: 'all 0.3s', 
+                  '&:hover': { boxShadow: 4, transform: 'scale(1.05)', cursor: 'pointer' }
+                }}
+                onMouseEnter={() => handleHover("Intelligent Flashcards")}
+              >
+                <InsightsIcon color="primary" sx={{ fontSize: 60, mb: 2 }} />
+                <Typography variant="h6" gutterBottom>Intelligent Flashcards</Typography>
                 <Typography color="textSecondary">
-                  Our AI intelligently breaks down your text into concise flashcards. Perfect for efficient studying.
+                  Our AI smartly breaks down content, creating flashcards that boost your learning and retention.
                 </Typography>
               </Box>
             </Grid>
             <Grid item xs={12} md={4}>
-              <Box sx={{ textAlign: 'center', p: 3 }}>
-                <DevicesIcon color="primary" sx={{ fontSize: 60, mb: 2 }} />
-                <Typography variant="h6" gutterBottom>Accessible Anywhere</Typography>
+              <Box 
+                sx={{ 
+                  textAlign: 'center', p: 3, transition: 'all 0.3s', 
+                  '&:hover': { boxShadow: 4, transform: 'scale(1.05)', cursor: 'pointer' }
+                }}
+                onMouseEnter={() => handleHover("Sync Across Devices")}
+              >
+                <CloudSyncIcon color="primary" sx={{ fontSize: 60, mb: 2 }} />
+                <Typography variant="h6" gutterBottom>Sync Across Devices</Typography>
                 <Typography color="textSecondary">
-                  Access your flashcards from any device, at any time. Study on the go with ease and flexibility.
+                  Access and review your flashcards on any device, whenever you need. Perfect for learning on the go.
                 </Typography>
               </Box>
             </Grid>
@@ -169,7 +204,9 @@ export default function Home() {
                   <Typography color="textSecondary" paragraph>
                     Access to basic flashcard features and limited storage.
                   </Typography>
-                  <Button variant="outlined" color="primary" size="large" sx={{ mt: 2 }} onClick={() => handleSubmit('basic')}>Choose Basic</Button>
+                  <Button variant="outlined" color="primary" size="large" sx={{ mt: 2 }} onClick={() => handleSubmit('basic')}>
+                    Get Started
+                  </Button>
                 </Box>
               </Fade>
             </Grid>
@@ -177,23 +214,24 @@ export default function Home() {
               <Fade in={checked} timeout={2000}>
                 <Box sx={{
                   p: 4,
-                  border: '2px solid',
+                  border: '1px solid',
                   borderColor: 'primary.main',
                   borderRadius: 2,
                   textAlign: 'center',
-                  backgroundColor: 'primary.light',
                   transition: 'all 0.3s',
                   '&:hover': {
                     boxShadow: 4,
                     transform: 'scale(1.05)',
                   },
                 }}>
-                  <Typography variant="h5" gutterBottom sx={{ fontWeight: 700 }}>Pro</Typography>
-                  <Typography variant="h6" gutterBottom>$10 / month</Typography>
+                  <Typography variant="h5" gutterBottom sx={{ fontWeight: 700 }}>Premium</Typography>
+                  <Typography variant="h6" gutterBottom>$15 / month</Typography>
                   <Typography color="textSecondary" paragraph>
-                    Unlimited flashcards and storage, with priority support.
+                    Unlock all features, including advanced AI capabilities and unlimited storage.
                   </Typography>
-                  <Button variant="contained" color="secondary" size="large" sx={{ mt: 2 }} onClick={() => handleSubmit('pro')}>Choose Pro</Button>
+                  <Button variant="contained" color="primary" size="large" sx={{ mt: 2 }} onClick={() => handleSubmit('premium')}>
+                    Get Started
+                  </Button>
                 </Box>
               </Fade>
             </Grid>
@@ -201,13 +239,21 @@ export default function Home() {
         </Box>
       </Container>
 
-      <Box sx={{ py: 4, backgroundColor: '#f5f5f5' }}>
-        <Container maxWidth="lg">
-          <Typography variant="body2" color="textSecondary" align="center">
-            © {new Date().getFullYear()} FlashCards. All rights reserved.
-          </Typography>
-        </Container>
-      </Box>
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        open={openSnackbar}
+        autoHideDuration={2000}
+        onClose={handleSnackbarClose}
+        message={snackbarMessage}
+        action={
+          <IconButton size="small" aria-label="close" color="inherit" onClick={handleSnackbarClose}>
+            <CloseIcon fontSize="small" />
+          </IconButton>
+        }
+      />
     </ThemeProvider>
-  )
+  );
 }
