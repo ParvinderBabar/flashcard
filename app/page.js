@@ -12,6 +12,7 @@ import CreateIcon from '@mui/icons-material/Create';
 import InsightsIcon from '@mui/icons-material/Insights';
 import CloudSyncIcon from '@mui/icons-material/CloudSync';
 import CloseIcon from '@mui/icons-material/Close';
+import LibraryBooksIcon from '@mui/icons-material/LibraryBooks'
 
 export default function Home() {
   const theme = useTheme();
@@ -86,7 +87,8 @@ export default function Home() {
       <AppBar position="static" color="transparent" elevation={0}>
         <Toolbar>
           <IconButton edge="start" color="primary" aria-label="logo" href="/">
-            <FlashOnIcon fontSize="large" />
+           
+             <LibraryBooksIcon fontSize="large"  />
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontWeight: 700, color: '#FFFFFF' }}>
             FlashCards
@@ -101,7 +103,7 @@ export default function Home() {
         </Toolbar>
       </AppBar>
 
-      <Container maxWidth="lg" sx={{ mt: 8, backgroundImage:'./bg.jpeg' }}>
+      <Container maxWidth="lg" sx={{ mt: 8, backgroundImage: 'url(/bg.jpeg)', backgroundSize: 'cover', backgroundPosition: 'center', minHeight: '100vh'  }}>
         <Grid container spacing={4} alignItems="center">
           <Grid item xs={12} md={6}>
             <Slide direction="up" in={checked} mountOnEnter unmountOnExit>
